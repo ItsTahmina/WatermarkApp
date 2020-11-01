@@ -44,8 +44,7 @@ class _MyHomePageState extends State<MyHomePage> {
     final byteData = await rootBundle.load('assets/$path');
 
     final file = File('${(await getTemporaryDirectory()).path}/$path');
-    await file.writeAsBytes(byteData.buffer
-        .asUint8List(byteData.offsetInBytes, byteData.lengthInBytes));
+    await file.writeAsBytes(byteData.buffer.asUint8List(byteData.offsetInBytes, byteData.lengthInBytes));
 
     return file;
   }
@@ -60,8 +59,8 @@ class _MyHomePageState extends State<MyHomePage> {
     img.copyInto(
       canvas,
       image2,
-      dstX: (image1.width / 2 - image2.width/2).round(),
-      dstY: (image1.height / 2-image2.height/2).round(),
+      dstX: (image1.width / 2 - image2.width / 2).round(),
+      dstY: (image1.height / 2 - image2.height / 2).round(),
       blend: true,
     );
 
@@ -82,23 +81,61 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Image Picker Example'),
-      ),
-      body: Center(
-        child: _image == null ? Text('No image selected.') : Image.file(_image),
-      ),
-      floatingActionButton: Column(
-        mainAxisSize: MainAxisSize.min,
+
+      body: Column(
         children: [
-          FloatingActionButton(
-            onPressed: mergeAndStore,
-            child: Icon(Icons.sd_storage),
+          Expanded(
+            child: Center(
+              child: _image == null
+                  ? FlatButton(
+                      onPressed: getImage,
+                      color: Colors.purple,
+                      child: Text('Load Image'),
+                    )
+                  : Image.file(_image),
+            ),
           ),
-          FloatingActionButton(
-            onPressed: getImage,
-            child: Icon(Icons.add_a_photo),
-          ),
+        _image == null ? SizedBox():  Column(children: [
+            Row(children: [
+              Text('Color'),
+              Spacer(),
+              FlatButton(onPressed: () {}, child: Container(color: Colors.black, width: 50, height: 20)),
+              FlatButton(onPressed: () {}, child: Container(color: Colors.grey, width: 50, height: 20)),
+            ]),
+            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [Text('Scale'), Slider(value: .50, onChanged: (v) {})]),
+            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [Text('Opacity'), Slider(value: .50, onChanged: (v) {})]),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('Position'),
+                Column(
+                  children: [
+                    Row(
+                      children: [
+                        FlatButton(onPressed: () {}, child: Text('TL')),
+                        FlatButton(onPressed: () {}, child: Text('TM')),
+                        FlatButton(onPressed: () {}, child: Text('TR')),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        FlatButton(onPressed: () {}, child: Text('ML')),
+                        FlatButton(onPressed: () {}, child: Text('MM')),
+                        FlatButton(onPressed: () {}, child: Text('MR')),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        FlatButton(onPressed: () {}, child: Text('BL')),
+                        FlatButton(onPressed: () {}, child: Text('BM')),
+                        FlatButton(onPressed: () {}, child: Text('BR')),
+                      ],
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ]),
         ],
       ),
     );
